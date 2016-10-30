@@ -62,16 +62,17 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return User
      */
-    protected function create(array $data) // TODO: SetCookie
+    protected function create(array $data)
     {
         $userKey = KeyProtectedByPassword::createRandomPasswordProtectedKey($data['password']);
 
         $user = new User([
             'username' => $data['username'],
             'password' => bcrypt($data['password']),
-            'totp_secret' => Crypto::encrypt('TODO', $userKey->unlockKey($data['password'])), // TODO
+            'totp_secret' => Crypto::encrypt(\Google2FA::generateSecretKey(), $userKey->unlockKey($data['password'])),
         ]);
         $user->user_key = encrypt($userKey->saveToAsciiSafeString());
+        $user->verified_2fa = false;
 
         $user->save();
 

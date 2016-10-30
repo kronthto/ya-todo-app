@@ -34,8 +34,6 @@ class LoginController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -49,7 +47,7 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        \Cookie::queue(\Cookie::forget(env('USER_KEY_COOKIE_NAME')));
+        \Cookie::queue(\Cookie::forget(config('session.userkey_cookie')));
 
         return $this->laravelLogout($request);
     }

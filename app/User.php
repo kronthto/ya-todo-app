@@ -11,11 +11,20 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property int $id
  * @property string $username
  * @property string $user_key
- * @property bool $2fa_verified
+ * @property bool $verified_2fa
  */
 class User extends Authenticatable
 {
     use Notifiable;
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'verified_2fa' => 'boolean',
+    ];
 
     public function getRememberToken()
     {

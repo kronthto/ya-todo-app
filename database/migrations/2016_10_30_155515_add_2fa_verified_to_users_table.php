@@ -13,7 +13,7 @@ class Add2faVerifiedToUsersTable extends Migration
     public function up()
     {
         \Schema::table('users', function (Blueprint $table) {
-            $table->boolean('2fa_verified')->after('totp_secret')->default(false);
+            $table->boolean('verified_2fa')->after('totp_secret')->default(false);
         });
     }
 
@@ -25,7 +25,7 @@ class Add2faVerifiedToUsersTable extends Migration
     public function down()
     {
         \Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('2fa_verified');
+            $table->dropColumn('verified_2fa');
         });
     }
 }

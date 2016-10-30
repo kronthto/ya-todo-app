@@ -123,6 +123,7 @@ return [
     */
 
     'cookie' => 'todo_session',
+    'userkey_cookie' => env('USER_KEY_COOKIE_NAME', 'userkey'),
 
     /*
     |--------------------------------------------------------------------------
