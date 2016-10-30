@@ -1,8 +1,4 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
     "type": "project",
     "require": {
         "php": ">=5.6.4",
@@ -42,9 +38,11 @@
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize"
-        ]
+        ],
+        "test": "phpunit"
     },
     "config": {
         "preferred-install": "dist"
-    }
+    },
+    "prefer-stable": true
 }

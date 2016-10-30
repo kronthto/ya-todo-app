@@ -91,6 +91,7 @@ return [
     |
     */
 
+    /*
     'passwords' => [
         'users' => [
             'provider' => 'users',
@@ -98,5 +99,6 @@ return [
             'expire' => 60,
         ],
     ],
+    */
 
 ];

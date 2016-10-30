@@ -9,13 +9,39 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public function getRememberToken()
+    {
+        return null; // not supported
+    }
+
+    public function setRememberToken($value)
+    {
+        // not supported
+    }
+
+    public function getRememberTokenName()
+    {
+        return null; // not supported
+    }
+
+    // Overrides the method to ignore the remember token.
+    public function setAttribute($key, $value)
+    {
+        if ($key !== parent::getRememberTokenName())
+        {
+            parent::setAttribute($key, $value);
+        }
+    }
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'username',
+        'password',
+        'totp_secret',
     ];
 
     /**
@@ -24,6 +50,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
+        'user_key',
+        'totp_secret',
     ];
 }
