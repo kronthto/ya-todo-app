@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Defuse\Crypto\Crypto;
+use Defuse\Crypto\KeyProtectedByPassword;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -20,7 +23,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers, DecryptsUserkey;
 
     /**
      * Where to redirect users after login / registration.
@@ -59,11 +62,24 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return User
      */
-    protected function create(array $data)
+    protected function create(array $data) // TODO: SetCookie
     {
-        return User::create([
+        $userKey = KeyProtectedByPassword::createRandomPasswordProtectedKey($data['password']);
+
+        $user = new User([
             'username' => $data['username'],
             'password' => bcrypt($data['password']),
+            'totp_secret' => Crypto::encrypt('TODO', $userKey->unlockKey($data['password'])), // TODO
         ]);
+        $user->user_key = encrypt($userKey->saveToAsciiSafeString());
+
+        $user->save();
+
+        return $user;
+    }
+
+    protected function registered(Request $request, $user)
+    {
+        $this->decryptKeyAndSetCookie($user, $request->get('password'));
     }
 }

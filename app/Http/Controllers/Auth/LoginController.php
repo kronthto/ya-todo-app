@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -18,7 +20,10 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers {
+        logout as laravelLogout;
+    }
+    use DecryptsUserkey;
 
     /**
      * Where to redirect users after login.
@@ -40,5 +45,17 @@ class LoginController extends Controller
     public function username()
     {
         return 'username';
+    }
+
+    public function logout(Request $request)
+    {
+        \Cookie::queue(\Cookie::forget(env('USER_KEY_COOKIE_NAME')));
+
+        return $this->laravelLogout($request);
+    }
+
+    protected function authenticated(Request $request, User $user)
+    {
+        $this->decryptKeyAndSetCookie($user, $request->get('password'));
     }
 }

@@ -11,7 +11,7 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct() // TODO: Prolonginate USERKEY / Logout if non existent (every controller)
     {
         $this->middleware('auth');
     }
