@@ -32,6 +32,11 @@ class HandlesUserkey
             $request->session()->regenerate();
 
             $request->session()->flash('login-reason', \Lang::get('auth.redirect.userkey'));
+
+            if ($request->expectsJson()) {
+                return response()->json(['error' => 'Missing userkey. Your session has been terminated.'], 401);
+            }
+
             return redirect()->guest('login');
         }
 
