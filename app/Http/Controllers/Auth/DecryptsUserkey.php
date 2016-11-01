@@ -15,9 +15,14 @@ trait DecryptsUserkey
      */
     public function decryptKeyAndSetCookie(User $user, $plainPassword)
     {
+        $this->setUserkeyCookie(KeyProtectedByPassword::loadFromAsciiSafeString(decrypt($user->user_key))->unlockKey($plainPassword)->saveToAsciiSafeString());
+    }
+
+    public function setUserkeyCookie($key)
+    {
         \Cookie::queue(cookie(
             config('session.userkey_cookie'),
-            KeyProtectedByPassword::loadFromAsciiSafeString(decrypt($user->user_key))->unlockKey($plainPassword)->saveToAsciiSafeString(),
+            $key,
             config('session.lifetime'),
             null,
             null,

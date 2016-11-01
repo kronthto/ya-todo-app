@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property int $id
  * @property string $username
  * @property string $user_key
+ * @property string $totp_secret
  * @property bool $verified_2fa
  */
 class User extends Authenticatable

@@ -21,13 +21,14 @@ Route::get('register', 'Auth\RegisterController@showRegistrationForm');
 Route::post('register', 'Auth\RegisterController@register');
 
 // 2FA Routes...
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', \App\Http\Middleware\HandlesUserkey::class]], function () {
 
     Route::get('verify2fa', 'Auth\Verify2FAController@show2FA');
+    Route::post('verify2fa', 'Auth\Verify2FAController@verify2FA');
 
 });
 
-Route::group(['middleware' => ['auth', \App\Http\Middleware\Enforce2FAValidation::class]], function () { // TODO: Prolonginate USERKEY / Logout if non existent (every controller)
+Route::group(['middleware' => ['auth', \App\Http\Middleware\HandlesUserkey::class, \App\Http\Middleware\Enforce2FAValidation::class]], function () {
 
     Route::group(['prefix' => 'api'], function () {
 
@@ -39,6 +40,8 @@ Route::group(['middleware' => ['auth', \App\Http\Middleware\Enforce2FAValidation
 
     Route::get('/', function () {
        return view('home');
-    });
+    })->name('home');
 
 });
+
+// TODO: CSP
