@@ -15,6 +15,14 @@ return [
 
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'invalidotp' => 'The onetime-password is incorrect.',
+
+    '2fa' => array(
+        'intro' => 'Please setup / verify Two-Factor-Auth continue.',
+      'invalid' => 'The onetime-password is incorrect.',
+    ),
+
+    'redirect' => array(
+      'userkey' => 'You have been logged out due to a missing userkey-cookie.',
+    ),
 
 ];

@@ -4,12 +4,16 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
+
+            <p class="alert alert-info">{{ trans('auth.2fa.intro') }}</p>
+
             <div class="panel panel-default">
                 <div class="panel-heading">Verify 2FA</div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/verify2fa') }}">
                         {{ csrf_field() }}
 
+                        @if ($qrcode)
                         <div class="form-group{{ $errors->has('otp') ? ' has-error' : '' }}">
                             <label for="secret" class="col-md-4 control-label">2FA Secret</label>
 
@@ -17,6 +21,7 @@
                                 <img id="secret" src="{{ $qrcode }}">
                             </div>
                         </div>
+                        @endif
 
                         <div class="form-group{{ $errors->has('otp') ? ' has-error' : '' }}">
                             <label for="otp" class="col-md-4 control-label">OTP</label>

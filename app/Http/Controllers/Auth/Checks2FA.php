@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Middleware\HandlesUserkey;
 use Defuse\Crypto\Crypto;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ trait Checks2FA
     public function getSecret(Request $request)
     {
         if (!$this->totpSecret) {
-            $this->totpSecret = Crypto::decrypt(auth()->user()->totp_secret, $request->attributes->get('userkey'));
+            $this->totpSecret = Crypto::decrypt(auth()->user()->totp_secret, $request->attributes->get(HandlesUserkey::USERKEY));
         }
 
         return $this->totpSecret;

@@ -6,6 +6,10 @@ use Closure;
 
 class Enforce2FAValidation
 {
+    const G2FA_AUTHORIZED = 'g2fa_authorized';
+
+    use Checks2FAValidationNeeded;
+
     /**
      * Handle an incoming request.
      *
@@ -16,9 +20,9 @@ class Enforce2FAValidation
      */
     public function handle($request, Closure $next)
     {
-        if (!\Auth::user()->verified_2fa) {
+        if ($this->needs2FAValidation($request)) {
             if ($request->expectsJson()) {
-                return response()->json(['error' => '2FA not verified.'], 403);
+                return response()->json(['error' => '2FA not verified.'], 401);
             }
 
             return redirect()->guest('verify2fa');

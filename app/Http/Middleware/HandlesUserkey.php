@@ -8,6 +8,8 @@ use Defuse\Crypto\Key;
 
 class HandlesUserkey
 {
+    const USERKEY = 'userkey';
+
     use DecryptsUserkey;
 
     /**
@@ -23,12 +25,19 @@ class HandlesUserkey
         $userkey = $request->cookie(config('session.userkey_cookie'));
 
         if (!$userkey) {
-            // TODO: Logout
+            \Auth::logout();
+
+            $request->session()->flush();
+
+            $request->session()->regenerate();
+
+            $request->session()->flash('login-reason', \Lang::get('auth.redirect.userkey'));
+            return redirect()->guest('login');
         }
 
         $this->setUserkeyCookie($userkey);
 
-        $request->attributes->set('userkey', Key::loadFromAsciiSafeString($userkey));
+        $request->attributes->set(self::USERKEY, Key::loadFromAsciiSafeString($userkey));
 
         return $next($request);
     }
