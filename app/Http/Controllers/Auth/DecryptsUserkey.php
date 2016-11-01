@@ -8,9 +8,9 @@ use Defuse\Crypto\KeyProtectedByPassword;
 trait DecryptsUserkey
 {
     /**
-     * Decrypts the user's key and sets it to a cookie
+     * Decrypts the user's key and sets it to a cookie.
      *
-     * @param User $user
+     * @param User   $user
      * @param string $plainPassword
      */
     public function decryptKeyAndSetCookie(User $user, $plainPassword)

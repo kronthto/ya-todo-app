@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-
 use Defuse\Crypto\Crypto;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;

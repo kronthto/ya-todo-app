@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -30,7 +31,7 @@ class Verify2FAController extends Controller
                 config('app.name'),
                 $user->username,
                 $this->getSecret($request)
-            )
+            ),
         ]);
     }
 
@@ -44,6 +45,7 @@ class Verify2FAController extends Controller
         if (\Google2FA::verifyKey($this->getSecret($request), $request->get('otp'))) {
             $user->verified_2fa = true;
             $user->save();
+
             return redirect()->intended('/');
         }
 

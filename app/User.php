@@ -6,7 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
- * App\User
+ * App\User.
  *
  * @property int $id
  * @property string $username
@@ -45,8 +45,7 @@ class User extends Authenticatable
     // Overrides the method to ignore the remember token.
     public function setAttribute($key, $value)
     {
-        if ($key !== parent::getRememberTokenName())
-        {
+        if ($key !== parent::getRememberTokenName()) {
             parent::setAttribute($key, $value);
         }
     }
