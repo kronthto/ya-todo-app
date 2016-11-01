@@ -52,6 +52,6 @@ class Verify2FAController extends Controller
         /** @var View $view */
         $view = $this->show2FA($request);
 
-        return $view->withErrors(['otp' => 'Invalid code']);
+        return $view->withErrors(['otp' => \Lang::get('auth.invalidotp')]);
     }
 }
