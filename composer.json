@@ -5,7 +5,8 @@
         "laravel/framework": "5.3.*",
         "defuse/php-encryption": "^2.0",
         "pragmarx/google2fa": "^1.0",
-        "bacon/bacon-qr-code": "~1.0"
+        "bacon/bacon-qr-code": "~1.0",
+        "ramsey/uuid": "^3.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

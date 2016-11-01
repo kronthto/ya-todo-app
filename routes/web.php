@@ -31,6 +31,11 @@ Route::group(['middleware' => ['auth', \App\Http\Middleware\HandlesUserkey::clas
         Route::get('/user', function () {
             return auth()->user();
         });
+
+        Route::get('/todos', 'TodoController@index');
+        Route::post('/todos', 'TodoController@store');
+        Route::match(['patch', 'put'], '/todos/{todo}', 'TodoController@update');
+        Route::delete('/todos/{todo}', 'TodoController@destroy');
     });
 
     Route::get('/', function () {

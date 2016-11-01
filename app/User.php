@@ -13,6 +13,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $user_key
  * @property string $totp_secret
  * @property bool $verified_2fa
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $unreadNotifications
  */
 class User extends Authenticatable
 {
@@ -72,4 +74,9 @@ class User extends Authenticatable
         'user_key',
         'totp_secret',
     ];
+
+    public function todos()
+    {
+        return $this->hasMany(Todo::class);
+    }
 }
