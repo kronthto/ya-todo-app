@@ -20,9 +20,7 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers {
-        logout as laravelLogout;
-    }
+    use AuthenticatesUsers;
     use DecryptsUserkey;
 
     /**
@@ -49,7 +47,13 @@ class LoginController extends Controller
     {
         \Cookie::queue(\Cookie::forget(config('session.userkey_cookie')));
 
-        return $this->laravelLogout($request);
+        $this->guard()->logout();
+
+        $request->session()->flush();
+
+        $request->session()->regenerate();
+
+        return redirect('/login');
     }
 
     protected function authenticated(Request $request, User $user)
