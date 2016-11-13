@@ -6,7 +6,9 @@
         "defuse/php-encryption": "^2.0",
         "pragmarx/google2fa": "^1.0",
         "bacon/bacon-qr-code": "~1.0",
-        "ramsey/uuid": "^3.5"
+        "ramsey/uuid": "^3.5",
+        "dingo/api": "1.0.x@dev",
+        "tymon/jwt-auth": "0.5.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

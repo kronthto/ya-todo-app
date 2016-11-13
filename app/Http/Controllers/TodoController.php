@@ -8,7 +8,7 @@ use App\Todo;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
 
-class TodoController extends Controller // TODO: Encrypt, XSRF / Dedicated API Auth
+class TodoController extends Controller // TODO: Encrypt
 {
     protected $todos;
 

@@ -26,20 +26,21 @@ Route::group(['middleware' => ['auth', \App\Http\Middleware\HandlesUserkey::clas
     Route::post('verify2fa', 'Auth\Verify2FAController@verify2FA');
 });
 
-Route::group(['middleware' => ['auth', \App\Http\Middleware\HandlesUserkey::class, \App\Http\Middleware\Enforce2FAValidation::class]], function () {
-    Route::group(['prefix' => 'api'], function () {
-        Route::get('/user', function () {
-            return auth()->user();
-        });
-
-        Route::get('/todos', 'TodoController@index');
-        Route::post('/todos', 'TodoController@store');
-        Route::match(['patch', 'put'], '/todos/{todo}', 'TodoController@update');
-        Route::delete('/todos/{todo}', 'TodoController@destroy');
+$api = app('Dingo\Api\Routing\Router'); // TODO: Key / 2FA Checks
+$api->version('v1', ['middleware' => 'api.auth'], function (\Dingo\Api\Routing\Router $api) {
+    $api->get('user', function() {
+        return app('Dingo\Api\Auth\Auth')->user();
     });
 
+    $api->get('todos', 'App\Http\Controllers\TodoController@index');
+    $api->post('todos', 'App\Http\Controllers\TodoController@store');
+    $api->match(['patch', 'put'], 'todos/{todo}', 'App\Http\Controllers\TodoController@update');
+    $api->delete('todos/{todo}', 'App\Http\Controllers\TodoController@destroy');
+});
+
+Route::group(['middleware' => ['auth', \App\Http\Middleware\HandlesUserkey::class, \App\Http\Middleware\Enforce2FAValidation::class]], function () {
     Route::get('/', function () {
-        return view('home');
+        return view('home', ['jwt' => JWTAuth::fromUser(auth()->user())]);
     })->name('home');
 });
 

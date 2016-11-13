@@ -176,6 +176,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        Dingo\Api\Provider\LaravelServiceProvider::class,
+        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+
         PragmaRX\Google2FA\Vendor\Laravel\ServiceProvider::class,
 
     ],
@@ -227,6 +230,11 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Google2FA' => PragmaRX\Google2FA\Vendor\Laravel\Facade::class,
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+
+        'API' => Dingo\Api\Facade\API::class,
+        'APIRoute' => Dingo\Api\Facade\Route::class,
 
     ],
 

@@ -15,9 +15,14 @@
 
     <!-- Scripts -->
     <script>
-        window.Laravel = <?php echo json_encode([
+        window.Laravel = <?php
+        $laravelVars = [
             'csrfToken' => csrf_token(),
-        ]); ?>
+        ];
+        if (isset($jwt)) {
+            $laravelVars['jwt'] = $jwt;
+        };
+        echo json_encode($laravelVars); ?>
     </script>
 </head>
 <body>
