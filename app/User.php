@@ -18,6 +18,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {
+    const KEYPASS_HASH_ALGO = 'sha384';
+    const PBKDF2_ITERATIONS = 1000;
+
     use Notifiable;
 
     /**
@@ -78,5 +81,25 @@ class User extends Authenticatable
     public function todos()
     {
         return $this->hasMany(Todo::class);
+    }
+
+    /**
+     * Builds a (hopefully) secure secret derivated from the user password
+     *
+     * @param User $user
+     * @param string $plainpass
+     *
+     * @return string
+     */
+    public static function getKeyPassword(User $user, $plainpass)
+    {
+        $userKey = $user->getKey();
+        if (!$userKey) {
+            throw new \InvalidArgumentException('User does not have an ID');
+        }
+
+        $salt = substr(hash_hmac(static::KEYPASS_HASH_ALGO, $userKey, app('encrypter')->getKey()), 0, 32);
+
+        return base64_encode(hash_pbkdf2(static::KEYPASS_HASH_ALGO, $plainpass, $salt, static::PBKDF2_ITERATIONS, 32, true));
     }
 }

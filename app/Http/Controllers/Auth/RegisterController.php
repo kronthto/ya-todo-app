@@ -64,16 +64,17 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $userKey = KeyProtectedByPassword::createRandomPasswordProtectedKey($data['password']);
-
         $user = new User([
             'username' => $data['username'],
             'password' => bcrypt($data['password']),
-            'totp_secret' => Crypto::encrypt(\Google2FA::generateSecretKey(), $userKey->unlockKey($data['password'])),
         ]);
-        $user->user_key = encrypt($userKey->saveToAsciiSafeString());
         $user->verified_2fa = false;
+        $user->save();
 
+        $keyPassphrase = User::getKeyPassword($user, $data['password']);
+        $userKey = KeyProtectedByPassword::createRandomPasswordProtectedKey($keyPassphrase);
+        $user->user_key = encrypt($userKey->saveToAsciiSafeString());
+        $user->totp_secret = Crypto::encrypt(\Google2FA::generateSecretKey(), $userKey->unlockKey($keyPassphrase));
         $user->save();
 
         return $user;

@@ -10,7 +10,7 @@ Also, I want to use this as a project to get some practise with [vue.js](http://
 
 ## Features
 
-* On Register, a random **userkey** gets generated and stored in the User model, **encrypted with the user's password**
+* On Register, a random **userkey** gets generated and stored in the User model, **encrypted with a PBKDF2 derivation of the user's password**
 * The password is of course only saved as a bcrypt-hash
 * On Login, the key gets decrypted and stored in a **encrypted cookie on the user's browser**
 * All private data (like tasks) will only be saved encrypted with the **userkey** provided in the cookie (it is never stored in a way the server could use it without the user)
