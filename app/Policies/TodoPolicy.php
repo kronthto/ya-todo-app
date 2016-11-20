@@ -19,6 +19,6 @@ class TodoPolicy
      */
     public function update(User $user, Todo $task)
     {
-        return $user->id === $task->user_id;
+        return $user->getKey() == $task->user_id;
     }
 }
