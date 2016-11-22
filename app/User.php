@@ -121,11 +121,16 @@ class User extends Authenticatable
         $user->verified_2fa = false;
         $user->save();
 
-        $keyPassphrase = User::getKeyPassword($user, $data['password']);
-        $userKey = KeyProtectedByPassword::createRandomPasswordProtectedKey($keyPassphrase);
-        $user->user_key = encrypt($userKey->saveToAsciiSafeString());
-        $user->totp_secret = Crypto::encrypt(\Google2FA::generateSecretKey(), $userKey->unlockKey($keyPassphrase));
-        $user->save();
+        try {
+            $keyPassphrase = User::getKeyPassword($user, $data['password']);
+            $userKey = KeyProtectedByPassword::createRandomPasswordProtectedKey($keyPassphrase);
+            $user->user_key = encrypt($userKey->saveToAsciiSafeString());
+            $user->totp_secret = Crypto::encrypt(\Google2FA::generateSecretKey(), $userKey->unlockKey($keyPassphrase));
+            $user->save();
+        } catch (\Exception $e) {
+            $user->forceDelete();
+            throw $e;
+        }
 
         return $user;
     }
