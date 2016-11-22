@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Defuse\Crypto\Crypto;
+use Defuse\Crypto\KeyProtectedByPassword;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -101,5 +103,30 @@ class User extends Authenticatable
         $salt = substr(hash_hmac(static::KEYPASS_HASH_ALGO, $userKey, app('encrypter')->getKey()), 0, 32);
 
         return base64_encode(hash_pbkdf2(static::KEYPASS_HASH_ALGO, $plainpass, $salt, static::PBKDF2_ITERATIONS, 32, true));
+    }
+
+    /**
+     * Creates a user and all the necessary keys using data from the registration form.
+     *
+     * @param array $data
+     *
+     * @return User
+     */
+    public static function createByRegister(array $data)
+    {
+        $user = new User([
+            'username' => $data['username'],
+            'password' => bcrypt($data['password']),
+        ]);
+        $user->verified_2fa = false;
+        $user->save();
+
+        $keyPassphrase = User::getKeyPassword($user, $data['password']);
+        $userKey = KeyProtectedByPassword::createRandomPasswordProtectedKey($keyPassphrase);
+        $user->user_key = encrypt($userKey->saveToAsciiSafeString());
+        $user->totp_secret = Crypto::encrypt(\Google2FA::generateSecretKey(), $userKey->unlockKey($keyPassphrase));
+        $user->save();
+
+        return $user;
     }
 }

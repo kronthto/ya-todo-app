@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
-use Defuse\Crypto\Crypto;
-use Defuse\Crypto\KeyProtectedByPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -64,20 +62,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = new User([
-            'username' => $data['username'],
-            'password' => bcrypt($data['password']),
-        ]);
-        $user->verified_2fa = false;
-        $user->save();
-
-        $keyPassphrase = User::getKeyPassword($user, $data['password']);
-        $userKey = KeyProtectedByPassword::createRandomPasswordProtectedKey($keyPassphrase);
-        $user->user_key = encrypt($userKey->saveToAsciiSafeString());
-        $user->totp_secret = Crypto::encrypt(\Google2FA::generateSecretKey(), $userKey->unlockKey($keyPassphrase));
-        $user->save();
-
-        return $user;
+        return User::createByRegister($data);
     }
 
     protected function registered(Request $request, $user)
